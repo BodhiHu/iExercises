@@ -35,7 +35,7 @@ class Solution:
         for i, v in enumerate(ret):
             print(v)
 
-        return ret
+        return list(ret)
 
 
 if (__name__ == '__main__'):
