@@ -9,29 +9,69 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// func
+func NewNode(val int, next *ListNode) *ListNode {
+	node := new(ListNode)
+	node.Val = val
+	node.Next = next
+	return node
+}
+
+func NewNodeList(values []int) *ListNode {
+	if len(values) == 0 {
+		return nil
+	}
+
+	var rootNode *ListNode = nil
+	var lastNode *ListNode = nil
+	for _, v := range values {
+		curNode := NewNode(v, nil)
+		if rootNode == nil {
+			rootNode = curNode
+		}
+		if lastNode != nil {
+			lastNode.Next = curNode
+		}
+
+		lastNode = curNode
+	}
+
+	return rootNode
+}
 
 func ReverseList(pHead *ListNode) *ListNode {
 	// write code here
-	if pHead == nil || pHead.Next == nil {
+	if pHead == nil {
 		return pHead
 	}
 
-	var preNode *ListNode = pHead
-	var nextNode *ListNode = pHead.Next
-	var curNode *ListNode
-	for nextNode != nil {
-		fmt.Println(nextNode)
-		fmt.Println("nextNode == nil: ", nextNode == nil)
-		curNode = nextNode
-		nextNode = curNode.Next
-		curNode.Next = preNode
-		preNode = curNode
+	arr := []*ListNode{}
+	for curNode := pHead; curNode != nil; curNode = curNode.Next {
+		arr = append(arr, curNode)
 	}
-	fmt.Println("return curNode: ", curNode)
-	return curNode
+	for i := len(arr) - 1; i > 0; i-- {
+		arr[i].Next = arr[i-1]
+		if i == 1 {
+			arr[0].Next = nil
+		}
+	}
+
+	return arr[len(arr)-1]
+}
+
+func PrintList(prefix string, pHead *ListNode) {
+	fmt.Print(prefix)
+	curNode := pHead
+	for curNode != nil {
+		fmt.Print(curNode, "\n")
+		curNode = curNode.Next
+	}
 }
 
 func main() {
+	values := []int{1, 2, 3, 4, 5}
+	nodeList := NewNodeList(values)
+	PrintList("nodeList = \n", nodeList)
 
+	revertedList := ReverseList(nodeList)
+	PrintList("\n\nrevertedList = \n", revertedList)
 }
