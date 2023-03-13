@@ -1,0 +1,26 @@
+plugins {
+	id 'java'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.7.1'
+}
+
+group = 'spring-app'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+  maven{ url 'https://maven.aliyun.com/repository/central' }
+  maven{ url 'https://maven.aliyun.com/repository/public' }
+  maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+test {
+	useJUnitPlatform()
+}
