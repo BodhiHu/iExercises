@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+
+	linked_list "exams.golang/exams/linked-list"
 )
+
+func Init(app *fiber.App) {
+	examsApi := app.Group("/exams")
+	examsApi.Get("/foo", Foo)
+	examsApi.Post("/replaceSpace", ReplaceSpace)
+	examsApi.Post("/reverseLinkedListToValues", ReverseLinkedListToValues)
+}
 
 func Foo(c *fiber.Ctx) error {
 	return c.SendString("foo")
@@ -26,11 +35,7 @@ func ReplaceSpace(c *fiber.Ctx) error {
 	return c.JSON(ret + "  <:>  " + ret2)
 }
 
-/** Reverse linked list as array */
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
-func ReverseLinkedList(c *fiber.Ctx) []int {
+/** Reverse linked list to values array */
+func ReverseLinkedListToValues(c *fiber.Ctx) error {
+	return linked_list.ReverseLinkedListToValues(c)
 }

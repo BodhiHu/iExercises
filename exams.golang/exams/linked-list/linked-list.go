@@ -2,6 +2,8 @@ package linked_list
 
 import (
 	"fmt"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type ListNode struct {
@@ -57,11 +59,10 @@ func ReverseList(pHead *ListNode) *ListNode {
 	return arr[len(arr)-1]
 }
 
-func ReverseListValues(pHead *ListNode) []int {
-	revertedList := ReverseList(pHead)
+func GetListValues(pHead *ListNode) []int {
 	values := []int{}
 
-	for cur := revertedList; cur != nil; cur = cur.Next {
+	for cur := pHead; cur != nil; cur = cur.Next {
 		values = append(values, cur.Val)
 	}
 
@@ -77,14 +78,22 @@ func PrintList(prefix string, pHead *ListNode) {
 	}
 }
 
-func main() {
-	values := []int{1, 2, 3, 4, 5}
-	nodeList := NewNodeList(values)
+func ReverseLinkedListToValues(c *fiber.Ctx) error {
+	// values := []int{1, 2, 3, 4, 5}
+
+	values := new([]int)
+	if err := c.BodyParser(values); err != nil {
+		return err
+	}
+
+	nodeList := NewNodeList(*values)
 	PrintList("nodeList = \n", nodeList)
 
 	revertedList := ReverseList(nodeList)
-	PrintList("\n\nrevertedList = \n", revertedList)
+	PrintList("\nrevertedList = \n", revertedList)
 
-	reversedValues := ReverseListValues(nodeList)
-	fmt.Print(reversedValues)
+	reversedValues := GetListValues(revertedList)
+	fmt.Print("\nreversedValues = \n", reversedValues)
+
+	return c.JSON(reversedValues)
 }

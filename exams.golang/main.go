@@ -19,10 +19,8 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
-	// API /exams ------------------------------------
-	examsApi := app.Group("/exams")
-	examsApi.Get("/foo", exams.Foo)
-	examsApi.Post("replaceSpace", exams.ReplaceSpace)
+	// exams API ------------------------------------
+	exams.Init(app)
 
 	log.Fatal(app.Listen(":3000"))
 }
