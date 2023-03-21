@@ -2,6 +2,9 @@ package tree
 
 import (
 	"fmt"
+
+	"exams.golang/utils/arrays"
+	"github.com/gofiber/fiber/v2"
 )
 
 type TreeNode struct {
@@ -38,7 +41,7 @@ eg2:
 Input: preorder = [-1], inorder = [-1]
 Output: [-1]
 */
-func BuildTree(preorder []int, inorder []int) *TreeNode {
+func doBuildTree(preorder []int, inorder []int) *TreeNode {
 	if len(preorder) == 0 {
 		return nil
 	}
@@ -49,31 +52,34 @@ func BuildTree(preorder []int, inorder []int) *TreeNode {
 	rootVal := preorder[0]
 	root := NewTreeNode(rootVal)
 
-	rootValInorderIndex := 0
-	for i, v := range inorder {
-		if rootVal == v {
-			rootValInorderIndex = i
-			break
-		}
+	rootInorderIndex := arrays.IndexOf(inorder, rootVal)
+
+	var leftTreeInorder, leftTreePreorder, rightTreeInorder, rightTreePreorder []int
+
+	if rootInorderIndex != 0 {
+		leftTreeInorder = inorder[:rootInorderIndex]
+		leftTreePreorder = preorder[1:(len(leftTreeInorder) + 1)]
 	}
 
-	var inorderLeftValues, preorderLeftValues, inorderRightValues, preorderRightValues []int
-
-	if rootValInorderIndex != 0 {
-		inorderLeftValues = inorder[:rootValInorderIndex]
-		preorderLeftValues = preorder[1:(len(inorderLeftValues) + 1)]
+	if rootInorderIndex != (len(inorder) - 1) {
+		rightTreeInorder = inorder[(rootInorderIndex + 1):]
+		rightTreePreorder = preorder[(1 + len(leftTreeInorder)):]
 	}
 
-	if rootValInorderIndex != (len(inorder) - 1) {
-		inorderRightValues = inorder[(rootValInorderIndex + 1):]
-		preorderRightValues = preorder[(1 + len(inorderLeftValues)):]
-	}
-
-	fmt.Println("inorderLeftValues, preorderLeftValues = ", inorderLeftValues, preorderLeftValues)
-	fmt.Println("inorderRightValues, preorderRightValues = ", inorderRightValues, preorderRightValues)
-
-	root.Left = BuildTree(inorderLeftValues, preorderLeftValues)
-	root.Right = BuildTree(inorderRightValues, preorderRightValues)
+	root.Left = doBuildTree(leftTreePreorder, leftTreeInorder)
+	root.Right = doBuildTree(rightTreePreorder, rightTreeInorder)
 
 	return root
+}
+
+func BuildTree(c *fiber.Ctx) error {
+	data := map[string][]int{}
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	fmt.Println("BuildTree inputs =", data)
+	tree := doBuildTree(data["preorder"], data["inorder"])
+
+	return c.JSON(tree)
 }

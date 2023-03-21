@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	linked_list "exams.golang/exams/linked-list"
+	"exams.golang/exams/tree"
 )
 
 func Init(app *fiber.App) {
@@ -14,6 +15,7 @@ func Init(app *fiber.App) {
 	examsApi.Get("/foo", Foo)
 	examsApi.Post("/replaceSpace", ReplaceSpace)
 	examsApi.Post("/reverseLinkedListToValues", ReverseLinkedListToValues)
+	examsApi.Post("/buildTree", tree.BuildTree)
 }
 
 func Foo(c *fiber.Ctx) error {
