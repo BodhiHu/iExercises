@@ -1,8 +1,8 @@
 package arrays
 
 func IndexOf[T comparable](arr []T, val T) int {
-	for i := 0; i < len(arr); i++ {
-		if arr[i] == val {
+	for i, v := range arr {
+		if arr[i] == v {
 			return i
 		}
 	}
