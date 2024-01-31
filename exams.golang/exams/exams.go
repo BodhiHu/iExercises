@@ -1,7 +1,9 @@
 package exams
 
 import (
+	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -40,4 +42,28 @@ func ReplaceSpace(c *fiber.Ctx) error {
 /** Reverse linked list to values array */
 func ReverseLinkedListToValues(c *fiber.Ctx) error {
 	return linked_list.ReverseLinkedListToValues(c)
+}
+
+func foo() any {
+	s := "abc" + "def"
+	fmt.Println(s)
+
+	fs := fmt.Sprintf("eg: %s, %d, %f", "123", 456, 234.5)
+	fmt.Println(fs)
+
+	sArr := []string{"s1", "s2", "s2"}
+	fmt.Println(strings.Join(sArr, ", "))
+
+	r := []int32("Hello, 菩提")
+	fmt.Printf("%s,%s,%s", string(r[0:5]), string(r[6:]), ".")
+
+	defer func() {
+		fmt.Printf("defered function")
+	}()
+
+	n, err := strconv.Atoi("42")
+	n2, err2 := strconv.ParseInt("123", 0, 0)
+	fmt.Printf("%d, %d, %s, %s", n, n2, err, err2)
+
+	return nil
 }
